@@ -2,6 +2,8 @@ using CleanProjectTemplate.Api.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.SetupSerilog();
+
 builder.Services
     .AddApplicationServices(builder.Configuration)
     .AddApplicationConfigurations(builder.Configuration);
