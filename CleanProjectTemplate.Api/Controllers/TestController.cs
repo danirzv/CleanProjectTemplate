@@ -1,4 +1,5 @@
-﻿using CleanProjectTemplate.Domain.Exceptions;
+﻿using CleanProjectTemplate.Api.Authorization;
+using CleanProjectTemplate.Domain.Exceptions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,9 +12,14 @@ public class TestController : ControllerBase
     [HttpGet("Hello")]
     public string HelloWorld() => "Hello world!";
 
-    [Authorize]
+    [Authorize(Policies.SomePolicy)]
     [HttpGet("Restricted")]
     public string Restricted() => "Restricted!";
+
+    [Authorize(Policies.SomePolicy)]
+    [AllowAnonymous]
+    [HttpGet("Unrestricted")]
+    public string Unrestricted() => "here Anonymous is allowed too!";
 
     [HttpPost("HandledError")]
     public string HandledError() => throw new SampleHandledError("Some Handled-Error happened here!");

@@ -1,4 +1,6 @@
-﻿using CleanProjectTemplate.Api.ExceptionHandler;
+﻿using CleanProjectTemplate.Api.Authentication;
+using CleanProjectTemplate.Api.Authorization;
+using CleanProjectTemplate.Api.ExceptionHandler;
 using CleanProjectTemplate.Api.Options;
 using Microsoft.AspNetCore.HttpLogging;
 
@@ -7,6 +9,7 @@ namespace CleanProjectTemplate.Api.Extensions;
 public static class ServiceCollectionExtensions
 {
     private static readonly HttpLoggingMiddlewareOptions DefaultHttpLoggingMiddlewareOptions = new();
+
     public static IServiceCollection AddApplicationServices(this IServiceCollection services, ConfigurationManager configuration)
     {
         services
@@ -38,18 +41,22 @@ public static class ServiceCollectionExtensions
             {
                 loggingFields |= HttpLoggingFields.RequestMethod;
             }
+
             if (options.RequestScheme)
             {
                 loggingFields |= HttpLoggingFields.RequestScheme;
             }
+
             if (options.RequestPath)
             {
                 loggingFields |= HttpLoggingFields.RequestPath;
             }
+
             if (options.RequestQuery)
             {
                 loggingFields |= HttpLoggingFields.RequestQuery;
             }
+
             if (options.ResponseBody)
             {
                 loggingFields |= HttpLoggingFields.ResponseBody;
@@ -68,12 +75,12 @@ public static class ServiceCollectionExtensions
 
         return services;
     }
-    
+
     private static IServiceCollection AddCleanProjectAuthentication(this IServiceCollection services)
     {
         services.AddAuthentication()
-            //Setup Authentication Methods here
-            .AddCookie(options =>
+            //TODO: Setup Authentication Methods here
+            .AddCookie(Schemes.SampleScheme, options =>
             {
                 options.Events.OnRedirectToLogin = context =>
                 {
@@ -95,7 +102,10 @@ public static class ServiceCollectionExtensions
     {
         services.AddAuthorization(options =>
         {
-            //Setup Policies here
+            //TODO: Remove this
+            options.AddPolicy(Policies.SomePolicy, policy => { policy.RequireAuthenticatedUser(); });
+
+            //TODO: Setup Policies here
         });
 
         return services;
