@@ -8,4 +8,4 @@ venv/
 sql/
 .vscode/
 .config/dotnet-tools.json
-.Development.json
+*.Development.json
