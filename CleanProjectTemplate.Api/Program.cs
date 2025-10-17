@@ -12,6 +12,4 @@ var app = builder.Build();
 
 app.SetupPipeline(builder.Configuration);
 
-app.MapGet("/Test", () => "Hello world!");  //TODO: just remove this
-
 app.Run();
