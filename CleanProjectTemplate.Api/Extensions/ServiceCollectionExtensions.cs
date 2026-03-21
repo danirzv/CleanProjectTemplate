@@ -2,6 +2,9 @@
 using CleanProjectTemplate.Api.Authorization;
 using CleanProjectTemplate.Api.ExceptionHandler;
 using CleanProjectTemplate.Api.Options;
+using CleanProjectTemplate.Application.Behaiviors;
+using FluentValidation;
+using MediatR;
 using Microsoft.AspNetCore.HttpLogging;
 
 namespace CleanProjectTemplate.Api.Extensions;
@@ -18,7 +21,8 @@ public static class ServiceCollectionExtensions
             .AddApplicationHttpLogging(configuration)
             .AddExceptionHandling(configuration)
             .AddCleanProjectAuthentication()
-            .AddCleanProjectAuthorization();
+            .AddCleanProjectAuthorization()
+            .AddCleanProjectMediatR();
 
         return services;
     }
@@ -107,6 +111,16 @@ public static class ServiceCollectionExtensions
 
             //TODO: Setup Policies here
         });
+
+        return services;
+    }
+    
+    private static IServiceCollection AddCleanProjectMediatR(this IServiceCollection services)
+    {
+        services.AddMediatR(x => x.RegisterServicesFromAssemblyContaining<Application.EntryPoint>());
+        services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidatorBehavior<,>));
+
+        services.AddValidatorsFromAssemblyContaining<Application.EntryPoint>();
 
         return services;
     }
